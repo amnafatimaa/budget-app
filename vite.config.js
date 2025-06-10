@@ -7,12 +7,12 @@ export default defineConfig({
   base: '/budget-app/',
   build: {
     outDir: 'dist',
-    emptyOutDir: true,
+    assetsDir: 'assets',
     rollupOptions: {
       output: {
-        entryFileNames: 'assets/[name].js',
-        chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]'
+        assetFileNames: `assets/[name].[ext]`,
+        chunkFileNames: `assets/[name].js`,
+        entryFileNames: `assets/[name].js`,
       }
     }
   }
