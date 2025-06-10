@@ -7,13 +7,20 @@ export default defineConfig({
   base: '/budget-app/',
   build: {
     outDir: 'dist',
-    assetsDir: 'assets',
     rollupOptions: {
       output: {
-        assetFileNames: `assets/[name].[ext]`,
-        chunkFileNames: `assets/[name].js`,
-        entryFileNames: `assets/[name].js`,
+        assetFileNames: 'assets/[name].[ext]',
+        chunkFileNames: 'assets/[name].[hash].js',
+        entryFileNames: 'assets/[name].[hash].js',
       }
+    }
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.json']
+  },
+  server: {
+    headers: {
+      'Content-Type': 'application/javascript'
     }
   }
 })
