@@ -31,7 +31,7 @@ A modern React application for managing personal budgets and expenses. Built wit
 
 1. Clone the repository
 ```bash
-git clone [your-repo-url]
+git clone https://github.com/amnafatimaa/budget-app.git
 ```
 
 2. Install dependencies
