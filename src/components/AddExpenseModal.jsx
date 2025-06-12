@@ -1,6 +1,6 @@
 import { Form, Modal, Button } from "react-bootstrap"
 import { useRef } from "react"
-import { useBudget } from "../contexts/context"
+import { useBudget } from "../Contexts/context"
 import ErrorBoundary from "./ErrorBoundary"
 
 export default function AddExpenseModal({ show, handleClose }) {

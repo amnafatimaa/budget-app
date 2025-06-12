@@ -1,13 +1,13 @@
 import './styles/App.css'
 import { Stack, Container, Button } from 'react-bootstrap'
 import BudgetCard from './components/BudgetCard'
-import { BudgetProvider, useBudget } from './contexts/context'
+import { BudgetProvider, useBudget } from './Contexts/context'
 import { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import AddBudgetModal from './components/AddBudgetModal'
 import AddExpenseModal from './components/AddExpenseModal'
 import ThemeToggle from './components/ThemeToggle'
-import { ThemeProvider } from './contexts/ThemeContext'
+import { ThemeProvider } from './Contexts/ThemeContext'
 import ErrorBoundary from './components/ErrorBoundary'
 
 const DEFAULT_BUDGETS = [

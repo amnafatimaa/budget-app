@@ -1,7 +1,7 @@
 import { Card, ProgressBar, Stack, Button } from 'react-bootstrap'
 import { currencyFormatter } from '../utils/currency'
-import { useBudget } from '../contexts/context'
-import { useTheme } from '../contexts/ThemeContext'
+import { useBudget } from '../Contexts/context'
+import { useTheme } from '../Contexts/ThemeContext'
 import { useState } from 'react'
 
 export default function BudgetCard({ name, amount, max, gray, onAddExpenseClick, id, color }) {
