@@ -1,0 +1,28 @@
+{
+  "short_name": "Budget Tracker",
+  "name": "Budget Tracker - Manage Your Expenses",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#4ECDC4",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "scope": "/budget-app/",
+  "prefer_related_applications": false
+} 

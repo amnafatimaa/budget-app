@@ -1,0 +1,93 @@
+.app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.container {
+  padding-top: 1rem !important;
+  min-height: 100vh;
+}
+
+/* Theme-aware styles */
+.min-vh-100 {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1 {
+  margin: 0;
+  color: var(--text-color);
+}
+
+/* Card hover effects */
+.card {
+  transition: transform 0.2s ease-in-out, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Progress bar theme adjustments */
+.progress {
+  background-color: var(--border-color);
+}
+
+/* Form control theme adjustments */
+.form-control, .form-select {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Button theme adjustments */
+.btn-outline-primary {
+  border-color: var(--border-color);
+}
+
+.dark-mode .btn-outline-primary {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .btn-outline-primary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Modal theme adjustments */
+.modal-content {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.modal-header, .modal-footer {
+  border-color: var(--border-color);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.read-the-docs {
+  color: #888;
+} 

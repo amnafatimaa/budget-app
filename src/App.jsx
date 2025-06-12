@@ -1,11 +1,14 @@
-import './App.css'
+import './styles/App.css'
 import { Stack, Container, Button } from 'react-bootstrap'
 import BudgetCard from './components/BudgetCard'
-import { BudgetProvider, useBudget } from './Contexts/context'
+import { BudgetProvider, useBudget } from './contexts/context'
 import { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import AddBudgetModal from './components/AddBudgetModal'
 import AddExpenseModal from './components/AddExpenseModal'
+import ThemeToggle from './components/ThemeToggle'
+import { ThemeProvider } from './contexts/ThemeContext'
+import ErrorBoundary from './components/ErrorBoundary'
 
 const DEFAULT_BUDGETS = [
   {
@@ -41,48 +44,51 @@ function App() {
   const { budgets, getBudgetExpenses, addBudget } = useBudget()
   
   useEffect(() => {
-    // Clear existing budgets
-    localStorage.removeItem('budgets')
-    localStorage.removeItem('expenses')
-    
-    // Add all default budgets
-    DEFAULT_BUDGETS.forEach(budget => {
-      addBudget(budget)
-    })
+    // Only initialize default budgets if none exist
+    if (budgets.length === 0) {
+      // Add all default budgets
+      DEFAULT_BUDGETS.forEach(budget => {
+        addBudget(budget)
+      })
+    }
   }, []) // Run only once on component mount
 
   return (
-    <div className="min-vh-100 bg-light">
-      <Container className="py-5">
-        <Stack direction="horizontal" gap={3} className="mb-5">
-          <div>
-            <h1 className="me-auto fs-2 fw-bold text-dark">Budget Tracker</h1>
-            <p className="text-muted mb-0">Manage your expenses effectively</p>
+    <div className="min-vh-100">
+      <Container className="py-4">
+        <div className="header-container mb-4">
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+            <div>
+              <h1 className="fs-2 fw-bold mb-1">Budget Tracker</h1>
+              <p className="text-muted mb-0">Manage your expenses effectively</p>
+            </div>
+            <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0">
+              <ThemeToggle />
+              <Button 
+                variant="primary" 
+                className="d-flex align-items-center gap-2"
+                onClick={() => setShowAddBudgetModal(true)}
+              >
+                <i className="bi bi-plus-lg"></i>
+                <span>Add Budget</span>
+              </Button>
+              <Button 
+                variant="outline-primary"
+                className="d-flex align-items-center gap-2"
+                onClick={() => setShowAddExpenseModal(true)}
+              >
+                <i className="bi bi-receipt"></i>
+                <span>Add Expense</span>
+              </Button>
+            </div>
           </div>
-          <Button 
-            variant="primary" 
-            className="ms-auto px-4 fw-semibold"
-            onClick={() => setShowAddBudgetModal(true)}
-          >
-            <i className="bi bi-plus-lg me-2"></i>
-            Add Budget
-          </Button>
-          <Button 
-            variant="outline-primary"
-            className="px-4 fw-semibold"
-            onClick={() => setShowAddExpenseModal(true)}
-          >
-            <i className="bi bi-receipt me-2"></i>
-            Add Expense
-          </Button>
-        </Stack>
+        </div>
         <div 
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
             gap: "1.5rem",
             alignItems: "flex-start",
-            marginTop: "1rem"
           }}
         >
           {budgets.map(budget => {
@@ -119,8 +125,12 @@ function App() {
 
 export default function AppWithProvider() {
   return (
-    <BudgetProvider>
-      <App />
-    </BudgetProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <BudgetProvider>
+          <App />
+        </BudgetProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   )
 }

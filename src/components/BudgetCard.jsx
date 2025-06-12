@@ -1,59 +1,101 @@
 import { Card, ProgressBar, Stack, Button } from 'react-bootstrap'
-import { currencyFormatter } from '../utils'
-import { useBudget } from '../Contexts/context'
+import { currencyFormatter } from '../utils/currency'
+import { useBudget } from '../contexts/context'
+import { useTheme } from '../contexts/ThemeContext'
+import { useState } from 'react'
 
 export default function BudgetCard({ name, amount, max, gray, onAddExpenseClick, id, color }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const { darkMode } = useTheme()
   const classNames = ["shadow-sm"]
+  
   if (amount > max) {
-    classNames.push("bg-danger", "bg-opacity-10")
+    classNames.push("bg-danger bg-opacity-10")
   } else if (gray) {
-    classNames.push("bg-light")
+    classNames.push(darkMode ? "bg-dark bg-opacity-10" : "bg-light")
   }
 
   const { getBudgetExpenses, deleteExpense, deleteBudget } = useBudget()
   const expenses = getBudgetExpenses(id)
 
   function handleDeleteBudget() {
-    // Delete all expenses for this budget first
     expenses.forEach(expense => deleteExpense(expense.id))
-    // Then delete the budget
     deleteBudget(id)
   }
 
   const cardStyle = {
-    borderTop: `4px solid ${color || '#ddd'}`,
+    position: 'relative',
     borderRadius: '0.5rem',
-    transition: 'transform 0.2s ease-in-out',
-    '&:hover': {
-      transform: 'translateY(-5px)'
-    }
+    backgroundColor: darkMode ? 'var(--card-bg)' : undefined,
+    borderColor: 'var(--border-color)',
+    color: 'var(--text-color)',
+    boxShadow: isHovered ? `0 8px 16px -4px ${color}40` : undefined,
+    transform: isHovered ? 'translateY(-5px)' : 'none',
+    transition: 'all 0.2s ease-in-out',
+    overflow: 'hidden'
+  }
+
+  const topBorderStyle = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '4px',
+    backgroundColor: color || '#ddd',
+    opacity: darkMode ? 0.8 : 1
+  }
+
+  const progressBarStyle = {
+    height: '0.6rem',
+    backgroundColor: darkMode ? 'var(--progress-bg)' : undefined
+  }
+
+  const getProgressBackground = () => {
+    const ratio = amount / max
+    if (ratio < 0.5) return `${color}40`
+    if (ratio < 0.75) return `${color}80`
+    return color
   }
 
   return (
-    <Card className={classNames.join(" ")} style={cardStyle}>
+    <Card 
+      className={classNames.join(" ")} 
+      style={cardStyle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div style={topBorderStyle} />
       <Card.Body>
         <Card.Title className="d-flex justify-content-between align-items-baseline fw-bold mb-4">
-          <div className="me-2 d-flex align-items-center">
-            <span className="fs-4">{name}</span>
+          <div className="me-2">
+            <span className="fs-4 text-truncate d-inline-block" style={{ maxWidth: '150px' }}>{name}</span>
           </div>
-          <div className="d-flex align-items-baseline">
-            <span className="fs-5">{currencyFormatter.format(amount)}</span>
-            <span className="text-muted fs-6 ms-1">
+          <div className="d-flex align-items-baseline flex-shrink-0">
+            <span className="fs-5 text-nowrap" style={{ color: 'var(--text-color)' }}>
+              {currencyFormatter.format(amount)}
+            </span>
+            <span className="text-muted fs-6 ms-1 text-nowrap">
               / {currencyFormatter.format(max)}
             </span>
           </div>
         </Card.Title>
-        <ProgressBar 
-          className="rounded-pill mb-4" 
-          variant={getProgressBarVariant(amount, max)}
-          min={0}
-          max={max}
-          now={amount}
-          style={{ height: '0.6rem' }}
-        />
+        <div className="progress rounded-pill mb-4" style={progressBarStyle}>
+          <div
+            className="progress-bar"
+            role="progressbar"
+            style={{
+              width: `${(amount / max * 100)}%`,
+              backgroundColor: getProgressBackground(),
+              transition: 'width 0.3s ease-in-out'
+            }}
+            aria-valuenow={amount}
+            aria-valuemin="0"
+            aria-valuemax={max}
+          />
+        </div>
         <Stack direction="horizontal" gap="3" className="mt-4 mb-3">
           <Button 
-            variant="outline-primary" 
+            variant={darkMode ? "outline-light" : "outline-dark"}
             className="ms-auto fw-semibold" 
             onClick={onAddExpenseClick}
           >
@@ -75,12 +117,15 @@ export default function BudgetCard({ name, amount, max, gray, onAddExpenseClick,
                 <div 
                   key={expense.id} 
                   className="d-flex justify-content-between align-items-center py-2 border-bottom"
+                  style={{ borderColor: 'var(--border-color)' }}
                 >
                   <div className="text-truncate me-2">
-                    <span className="fw-medium">{expense.description}</span>
+                    <span className="fw-medium" style={{ color: 'var(--text-color)' }}>
+                      {expense.description}
+                    </span>
                   </div>
                   <div className="d-flex align-items-center">
-                    <span className="text-nowrap me-2 fw-semibold">
+                    <span className="text-nowrap me-2 fw-semibold" style={{ color: 'var(--text-color)' }}>
                       {currencyFormatter.format(expense.amount)}
                     </span>
                     <Button 
@@ -101,11 +146,4 @@ export default function BudgetCard({ name, amount, max, gray, onAddExpenseClick,
       </Card.Body>
     </Card>
   )
-}
-
-function getProgressBarVariant(amount, max) {
-  const ratio = amount / max
-  if (ratio < 0.5) return "primary"
-  if (ratio < 0.75) return "warning"
-  return "danger"
 }
